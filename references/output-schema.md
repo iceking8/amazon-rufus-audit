@@ -57,6 +57,10 @@ Use this table for raw and normalized capture results:
 | asin | yes | Use `unknown` if unavailable |
 | product_url | yes | Source URL |
 | persona_label | yes | `default` if no persona was used |
+| run_environment | no | local_browser, vps_xvfb, pasted_data, screenshot, etc. |
+| login_status | no | logged_in, not_logged_in, unknown |
+| challenge_type | no | none, login_required, otp_or_totp_required, email_or_sms_code_required, captcha_or_robot_check, account_security_warning |
+| verification_action | no | none, preauthorized_login_used, preauthorized_otp_used, human_intervention_needed |
 | source_depth | yes | `0` starter, `1` follow-up, `2` deeper follow-up |
 | parent_question_id | no | Link follow-up to parent question |
 | clicked_path | no | Question path, such as `Q001 > Q004` |
@@ -172,11 +176,11 @@ normalized_question,primary_category,priority_score,priority_label,own_coverage_
 For V2 capture files, prefer this expanded baseline header:
 
 ```csv
-capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,planned_question_id,question_origin,profile_signal,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_confidence,primary_category,secondary_categories,buyer_concern,competitor_strength,concern_scope,notes
+capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,run_environment,login_status,challenge_type,verification_action,source_depth,parent_question_id,clicked_path,planned_question_id,question_origin,profile_signal,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_confidence,primary_category,secondary_categories,buyer_concern,competitor_strength,concern_scope,notes
 ```
 
 For automation-heavy captures, use this full forensic header:
 
 ```csv
-capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,planned_question_id,question_origin,profile_signal,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_length_chars,answer_confidence,answer_type,follow_up_prompts,primary_category,secondary_categories,buyer_concern,competitor_strength,competitor_mentions,price_evidence,review_evidence_summary,concern_scope,recovery_action,notes
+capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,run_environment,login_status,challenge_type,verification_action,source_depth,parent_question_id,clicked_path,planned_question_id,question_origin,profile_signal,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_length_chars,answer_confidence,answer_type,follow_up_prompts,primary_category,secondary_categories,buyer_concern,competitor_strength,competitor_mentions,price_evidence,review_evidence_summary,concern_scope,recovery_action,notes
 ```
