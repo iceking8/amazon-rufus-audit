@@ -18,6 +18,24 @@ If the browser is not logged in:
 
 If a pre-authorized login workflow exists, use it once, verify `login_status=logged_in`, and continue. If login still fails, save the blocker and stop instead of retrying in a loop.
 
+## Mobile Number Verification Gate
+
+If Amazon displays an "Add a mobile number", "Add mobile number", phone number, or mobile verification page after login, treat it as an account security verification blocker, even if username/password login already succeeded. Do not keep looking for Rufus while this page is active.
+
+Required flow:
+
+1. Stop Rufus, Listing, tab-scanning, and retry-loop actions immediately.
+2. Save blocker state with `challenge_type=mobile_number_required`, `failure_reason=mobile_number_verification_required`, and `verification_action=human_intervention_needed`.
+3. Ask the human for the Amazon buyer account phone number through the normal user-facing or approved secret channel.
+4. Enter the phone number only after the human provides it, submit the form, and do not persist or print the phone number.
+5. After the form is accepted, send the exact user-facing status `已添加手机号`.
+6. When Amazon asks for the SMS verification code, ask the human for the code through the normal user-facing or approved secret channel.
+7. Enter the SMS code only for this verification attempt, submit it, and do not persist or print the code.
+8. Confirm the page is no longer on the mobile verification screen and the browser is still logged into the buyer account.
+9. Resume from `login_state_check` and continue the original ASIN capture plan.
+
+If the phone number is rejected, the SMS code is rejected, the code expires, or Amazon shows an account security warning, save a blocker and stop. Do not retry indefinitely.
+
 ## Pre-Capture Listing Snapshot
 
 Before interacting with Rufus, save the visible Listing context needed for product profiling:
@@ -72,6 +90,15 @@ not_logged_in
   -> blocker_save
   -> user_message_for_login
   -> close_browser
+
+mobile_number_required
+  -> blocker_save
+  -> user_message_for_phone_number
+  -> submit_phone_number
+  -> user_message_added_phone
+  -> user_message_for_sms_code
+  -> submit_sms_code
+  -> login_state_check
 ```
 
 Never enter `submit_one_question` while a previous question is in `waiting_for_thinking` or `waiting_for_answer_stable`.
