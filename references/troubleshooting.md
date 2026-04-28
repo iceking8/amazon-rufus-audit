@@ -6,6 +6,7 @@ Use this reference when a Rufus capture run returns incomplete rows, missing ans
 
 | symptom | Likely cause | What to record |
 | --- | --- | --- |
+| Capture asks generic questions that do not match the product | Product profile was skipped or Listing content was not read first | `profile_status=partial`, add `question_origin`, record missing profile evidence |
 | Rufus panel is not visible | Marketplace, account, browser, region, or A/B availability issue | `capture_status=blocked`, `failure_reason=rufus_not_visible` |
 | Question is visible but answer never appears | Loading failure, network issue, panel state issue | `capture_status=question_only`, keep raw question |
 | Several later questions are stuck on `Thinking...` | Questions were submitted concurrently or before the previous answer stabilized | Stop queue, try `Resume response`, mark unresolved rows incomplete |
@@ -20,14 +21,17 @@ Use this reference when a Rufus capture run returns incomplete rows, missing ans
 When capture quality is poor:
 
 1. Retry the same ASIN in a fresh page.
-2. Capture starter questions before clicking any question.
-3. Click one question, wait for the answer to stop changing, then copy the answer.
-4. Record the clicked path before moving to follow-ups.
-5. Stop a branch after two repeated or off-topic follow-ups.
-6. Keep failed rows instead of deleting them; failed rows explain why analysis may be limited.
+2. Rebuild the product profile from visible Listing content.
+3. Recreate the planned question pool and mark question origins.
+4. Capture starter questions before clicking any question.
+5. Click one question, wait for the answer to stop changing, then copy the answer.
+6. Record the clicked path before moving to follow-ups.
+7. Stop a branch after two repeated or off-topic follow-ups.
+8. Keep failed rows instead of deleting them; failed rows explain why analysis may be limited.
 
 ## Automation Guardrails
 
+- Take a Listing snapshot and create a question plan before submitting custom questions.
 - Identify the real Rufus submit button. A known good selector can be `#rufus-submit-button`, but still verify it is inside the Rufus input form and has submit behavior.
 - Do not click header buttons or generic buttons near the Rufus panel unless their role is confirmed.
 - Submit only one question at a time.
@@ -39,6 +43,7 @@ When capture quality is poor:
 ## Analysis Safety Rules
 
 - Do not infer a Rufus answer from product bullets, reviews, or images when no answer was captured.
+- Do not treat a generated question as product-specific unless it is tied to a captured profile signal.
 - Do not use blocked, duplicate, or out-of-scope rows as evidence for Listing changes.
 - Do not claim "your Listing is missing X" unless the user's Listing content was provided or inspected.
 - Do not recommend adding a competitor-specific feature unless the user's product actually has that feature.
