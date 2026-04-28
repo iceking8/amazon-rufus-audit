@@ -42,7 +42,7 @@ If a task requires Amazon login, first check whether the user supplied a pre-aut
    - Identify the user's product as `own`.
    - Identify each competitor as `competitor_1`, `competitor_2`, etc.
    - Record marketplace, ASIN, URL, capture date, and persona label.
-   - For VPS or headless-style browser collection, confirm the run will use a single account, single ASIN at a time, one visible browser session, and a resumable state file. See [references/vps-browser-capture.md](references/vps-browser-capture.md).
+   - For automated browser collection, use a single account, process one ASIN at a time, keep one active browser session, and save resumable state.
 
 2. Build product profile and collect Rufus Q&A.
    - Before submitting custom questions, read visible Listing content and build a product profile: title, brand, price, rating, bullets, product details, variant options, image callouts, A+ content, Q&A, and review themes when available.
@@ -129,7 +129,7 @@ Make recommendations practical and placement-specific. Prefer "add an FAQ image 
 - [references/audit-workflow.md](references/audit-workflow.md): Detailed capture, comparison, and retest workflow.
 - [references/product-profiling.md](references/product-profiling.md): Required Listing-read gate and product-aware question planning.
 - [references/browser-capture.md](references/browser-capture.md): Browser automation guardrails for Rufus chat collection.
-- [references/vps-browser-capture.md](references/vps-browser-capture.md): Ubuntu, Chrome, and Xvfb collection rules for low-frequency VPS runs.
+- [references/vps-browser-capture.md](references/vps-browser-capture.md): Optional notes for low-frequency VPS/Xvfb runs after the agent has already identified that runtime.
 - [references/account-safety.md](references/account-safety.md): Pre-authorized login, OTP/TOTP handling, secret hygiene, and human-intervention rules.
 - [references/question-taxonomy.md](references/question-taxonomy.md): Question categories, priority scoring, and coverage labels.
 - [references/output-schema.md](references/output-schema.md): Tables and report structure to use in deliverables.
