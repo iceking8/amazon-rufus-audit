@@ -33,7 +33,7 @@ When capture quality is poor:
 ## Automation Guardrails
 
 - Take a Listing snapshot and create a question plan before submitting custom questions.
-- For VPS runs, process one ASIN at a time in one visible browser session and write resumable state after every answered question.
+- For automated browser runs, process one ASIN at a time in one browser session and write resumable state after every answered question.
 - Use pre-authorized login and OTP/TOTP workflows only through approved secret channels; never log credentials, cookies, OTP seeds, or one-time codes.
 - Identify the real Rufus submit button. A known good selector can be `#rufus-submit-button`, but still verify it is inside the Rufus input form and has submit behavior.
 - Do not click header buttons or generic buttons near the Rufus panel unless their role is confirmed.
