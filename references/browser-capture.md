@@ -2,6 +2,17 @@
 
 Use this reference when automating Rufus Q&A capture through a browser, CDP, Playwright, or another UI automation layer.
 
+## Pre-Capture Listing Snapshot
+
+Before interacting with Rufus, save the visible Listing context needed for product profiling:
+
+- title, brand, ASIN, price, rating, review count, and variants,
+- bullets and product details,
+- visible image callouts and A+ sections when accessible,
+- existing Q&A and review themes when visible.
+
+Use this snapshot to create the product profile and planned question pool. If the automation cannot read a section, record it as unavailable instead of guessing.
+
 ## Submit Button Verification
 
 Before sending questions, verify the actual Rufus submit control:
@@ -20,6 +31,9 @@ Automation must follow this state machine:
 
 ```text
 ready
+  -> listing_snapshot
+  -> product_profile
+  -> question_plan
   -> submit_one_question
   -> waiting_for_thinking
   -> waiting_for_answer_stable
@@ -58,6 +72,8 @@ If multiple submitted questions are stuck in `Thinking...`:
 Capture more than just a short summary:
 
 - raw question,
+- question origin,
+- profile signal for generated questions,
 - raw answer,
 - answer length,
 - answer type,
