@@ -34,7 +34,7 @@ Ask for only the missing information needed for the requested depth:
 - Optional persona labels for analysis, such as "parents with young kids", "minimalist home office", or "price-sensitive buyer".
 - Optional pre-authorized Amazon login and OTP/TOTP workflow, supplied outside the skill through secrets or environment variables.
 
-If a task requires Amazon login, first check whether the user supplied a pre-authorized login and verification workflow. Use that workflow only for the user's own account and never print credentials, cookies, OTP seeds, or one-time codes. If no workflow is available, ask for human help. If a task requires typing persona details into Amazon profile features such as "Tell us about you", stop and ask for explicit confirmation before entering that data. Prefer labeling personas in the audit table without changing the user's Amazon account profile.
+If a task requires Amazon login, first check whether the user supplied a pre-authorized login and verification workflow. Use that workflow only for the user's own account and never print credentials, cookies, OTP seeds, or one-time codes. If no workflow is available, ask for human help through the agent's normal user-facing reply, not through terminal stdin or blocking `input()` prompts. If a task requires typing persona details into Amazon profile features such as "Tell us about you", stop and ask for explicit confirmation through the chat/user interface before entering that data. Prefer labeling personas in the audit table without changing the user's Amazon account profile.
 
 ## Workflow
 
@@ -43,6 +43,7 @@ If a task requires Amazon login, first check whether the user supplied a pre-aut
    - Identify each competitor as `competitor_1`, `competitor_2`, etc.
    - Record marketplace, ASIN, URL, capture date, and persona label.
    - For automated browser collection, use a single account, process one ASIN at a time, keep one active browser session, and save resumable state.
+   - Never use blocking terminal prompts such as Python `input()` for confirmations, overwrite checks, login codes, or human intervention. Use the agent's normal user-facing reply or a non-interactive default.
 
 2. Build product profile and collect Rufus Q&A.
    - Before submitting custom questions, read visible Listing content and build a product profile: title, brand, price, rating, bullets, product details, variant options, image callouts, A+ content, Q&A, and review themes when available.
