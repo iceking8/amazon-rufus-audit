@@ -2,6 +2,8 @@
 
 Use this reference when automating Rufus Q&A capture through a browser, CDP, Playwright, or another UI automation layer.
 
+For Ubuntu VPS runs with Chrome and Xvfb, also follow [vps-browser-capture.md](vps-browser-capture.md) and [account-safety.md](account-safety.md).
+
 ## Pre-Capture Listing Snapshot
 
 Before interacting with Rufus, save the visible Listing context needed for product profiling:
@@ -12,6 +14,12 @@ Before interacting with Rufus, save the visible Listing context needed for produ
 - existing Q&A and review themes when visible.
 
 Use this snapshot to create the product profile and planned question pool. If the automation cannot read a section, record it as unavailable instead of guessing.
+
+## Login and Verification Check
+
+If Rufus is not visible until login, check for a pre-authorized login and OTP/TOTP workflow before asking the user for help. Use the workflow only through approved secret channels and record non-sensitive status fields such as `logged_in=true` or `verification_action=preauthorized_otp_used`.
+
+If there is no pre-authorized workflow, or if Amazon presents an account security warning, pause and ask for human assistance. Do not print credentials, cookies, OTP seeds, or one-time codes.
 
 ## Submit Button Verification
 
