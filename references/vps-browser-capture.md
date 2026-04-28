@@ -1,16 +1,13 @@
-# VPS Browser Capture
+# VPS/Xvfb Browser Capture
 
-Use this reference when Rufus capture runs on an Ubuntu VPS with Chrome and a virtual display such as Xvfb.
+Use this reference only after the agent has already identified that Rufus capture is running on a VPS or virtual-display browser runtime such as Linux + Chrome + Xvfb. This file is optional; do not require environment detection before every capture run.
 
-## Environment Preflight
+## Runtime Notes
 
-Before opening Amazon:
-
-- Confirm Chrome launches inside the virtual display and can render normal pages.
 - Use one persistent Chrome profile for the authorized buyer account unless the user requests a clean login.
-- Record OS, Chrome version, marketplace, timezone, language, viewport, and profile label.
 - Keep one active Amazon browser session for collection; do not run multiple parallel Amazon tabs or workers.
-- Confirm storage for per-ASIN state files and screenshots or HTML snippets when the user wants evidence.
+- Save per-ASIN state files and screenshots or HTML snippets when the user wants evidence.
+- Let the agent choose the practical browser launch details for the current OS and runtime.
 
 ## Login and Rufus Visibility Gate
 
