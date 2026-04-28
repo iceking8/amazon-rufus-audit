@@ -1,4 +1,4 @@
 interface:
   display_name: "Amazon Rufus Audit"
-  short_description: "Collect Rufus competitor Q&A and turn gaps into Listing fixes."
-  default_prompt: "Use this skill to collect Rufus Q&A from competitor and own Amazon product pages, compare coverage, and produce a prioritized Listing optimization plan."
+  short_description: "Profile Amazon Listings, collect Rufus Q&A, and turn gaps into fixes."
+  default_prompt: "Use this skill to read Amazon Listing content, build a product-aware Rufus question plan, collect Rufus Q&A from competitor and own product pages, compare coverage, and produce a prioritized Listing optimization plan."
