@@ -57,7 +57,7 @@ Use this table for raw and normalized capture results:
 | asin | yes | Use `unknown` if unavailable |
 | product_url | yes | Source URL |
 | persona_label | yes | `default` if no persona was used |
-| run_environment | no | local_browser, vps_xvfb, pasted_data, screenshot, etc. |
+| run_environment | no | browser, remote_browser, pasted_data, screenshot, etc. |
 | login_status | no | logged_in, not_logged_in, unknown |
 | challenge_type | no | none, login_required, otp_or_totp_required, email_or_sms_code_required, captcha_or_robot_check, account_security_warning |
 | verification_action | no | none, preauthorized_login_used, preauthorized_otp_used, human_intervention_needed |
