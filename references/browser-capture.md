@@ -21,6 +21,8 @@ If Rufus is not visible until login, check for a pre-authorized login and OTP/TO
 
 If there is no pre-authorized workflow, or if Amazon presents an account security warning, pause and ask for human assistance. Do not print credentials, cookies, OTP seeds, or one-time codes.
 
+Do not ask for login help, verification codes, overwrite decisions, or other confirmations through terminal stdin or blocking `input()` prompts. In background or remote runs, use the agent's normal user-facing reply, or save a blocker state and exit cleanly.
+
 ## Submit Button Verification
 
 Before sending questions, verify the actual Rufus submit control:
