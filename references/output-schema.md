@@ -15,14 +15,26 @@ Use this table for raw and normalized capture results:
 | persona_label | yes | `default` if no persona was used |
 | source_depth | yes | `0` starter, `1` follow-up, `2` deeper follow-up |
 | parent_question_id | no | Link follow-up to parent question |
+| clicked_path | no | Question path, such as `Q001 > Q004` |
+| capture_status | yes | answered, question_only, blocked, duplicate, out_of_scope |
+| failure_reason | no | Required when status is not answered |
 | raw_question | yes | Preserve original wording |
 | normalized_question | yes | Cleaned and deduped wording |
-| raw_answer | yes | Preserve original answer when available |
-| answer_summary | yes | Short summary of Rufus answer |
+| raw_answer | conditional | Required only when capture_status is answered |
+| answer_summary | conditional | Required only when capture_status is answered |
+| answer_length_chars | no | Character count of raw answer, useful for spotting unusually long comparison answers |
+| answer_confidence | yes | high, medium, low, none |
+| answer_type | conditional | direct_answer, review_summary, comparison_table, alternative_recommendation, price_history, activity_fit, mixed |
+| follow_up_prompts | no | Follow-up prompts Rufus displayed after the answer |
 | primary_category | yes | From question taxonomy |
 | secondary_categories | no | Comma-separated |
 | buyer_concern | yes | One-sentence concern interpretation |
 | competitor_strength | no | What the competitor page seems to answer well |
+| competitor_mentions | no | Competitors or alternatives Rufus mentions in the answer |
+| price_evidence | no | Current price, historical range, or compared prices when Rufus reports them |
+| review_evidence_summary | no | Review themes Rufus cites or paraphrases |
+| concern_scope | yes | category_concern, competitor_specific, own_opportunity, unsupported_gap |
+| recovery_action | no | resume_response, reload_preserved_history, none, etc. |
 | notes | no | Capture caveats |
 
 ## Own Listing Coverage Matrix
@@ -45,6 +57,8 @@ Use this table after comparing against the user's Listing:
 | recommended_fix_area | yes | image, A+, FAQ, bullet, title, description, review strategy |
 | recommended_action | yes | Specific action |
 | expected_rufus_benefit | yes | What Rufus should be better able to answer |
+| recommendation_confidence | yes | high, medium, low |
+| evidence_needed | no | What to collect before acting if confidence is low |
 
 ## Report Structure
 
@@ -79,6 +93,16 @@ Deliver reports in this order:
    - What to recapture after 3 months and 6 months.
    - Which rows define success.
 
+Add **Capture Health** before Executive Summary when any row is not `answered`:
+
+- Products attempted.
+- Products with Rufus visible.
+- Answered row count.
+- Incomplete or blocked row count.
+- Rows excluded from analysis.
+- Main failure reasons.
+- Whether the dataset is strong enough for gap analysis.
+
 ## CSV Header
 
 When the user asks for a spreadsheet-ready file, use this CSV header for the baseline:
@@ -91,4 +115,16 @@ Use this CSV header for the gap matrix:
 
 ```csv
 normalized_question,primary_category,priority_score,priority_label,own_coverage_label,title_evidence,bullet_evidence,image_evidence,aplus_evidence,review_evidence,gap_type,recommended_fix_area,recommended_action,expected_rufus_benefit
+```
+
+For V2 capture files, prefer this expanded baseline header:
+
+```csv
+capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_confidence,primary_category,secondary_categories,buyer_concern,competitor_strength,concern_scope,notes
+```
+
+For automation-heavy captures, use this full forensic header:
+
+```csv
+capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_length_chars,answer_confidence,answer_type,follow_up_prompts,primary_category,secondary_categories,buyer_concern,competitor_strength,competitor_mentions,price_evidence,review_evidence_summary,concern_scope,recovery_action,notes
 ```

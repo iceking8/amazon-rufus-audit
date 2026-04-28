@@ -13,9 +13,14 @@ Assign one primary category and optional secondary categories.
 | material_safety | Materials, ingredients, safety, allergens, toxicity, child/pet use |
 | durability_quality | Durability, lifespan, construction, defect risk |
 | setup_usage | Installation, assembly, care, maintenance, learning curve |
+| care_wash | Washing, cleaning, drying, care instructions, maintenance details |
 | performance_result | Expected outcome, before/after, speed, strength, effectiveness |
+| customer_sentiment | What customers say, review summaries, common praise or complaints |
 | package_accessory | What is included, variants, missing parts, packaging |
 | comparison | Product vs competitor, variant vs variant, alternative choices |
+| alternative_recommendation | Rufus recommends another product or says this one is not ideal |
+| price_history | Current price, price range, discount history, value over time |
+| sport_activity_fit | Whether the product is suitable for a specific sport, activity, dress code, or venue |
 | negative_review | Concerns surfaced from complaints or low-star review themes |
 | price_value | Whether the product is worth it, value perception, budget fit |
 | warranty_support | Warranty, returns, customer support, replacement |
@@ -35,6 +40,43 @@ Use one coverage label for the user's Listing:
 | contradicted | Listing claims conflict with reviews, Q&A, or other evidence |
 | review_only | Reviews answer the question, but controlled Listing content does not |
 | not_applicable | The question does not apply to the user's product |
+
+## Capture Status Labels
+
+Use one capture status for every collected row:
+
+| label | Meaning |
+| --- | --- |
+| answered | Question and Rufus answer were captured successfully |
+| question_only | Question was captured, but no Rufus answer was captured |
+| blocked | Capture was blocked by missing Rufus panel, login wall, CAPTCHA, region issue, or page load failure |
+| duplicate | Question is a near duplicate of a stronger existing row |
+| out_of_scope | Question or answer refers to another product, sponsored content, general category advice, or non-buyer intent |
+
+## Answer Type Labels
+
+Use one answer type for every answered row:
+
+| label | Meaning |
+| --- | --- |
+| direct_answer | Direct answer to a specific product question |
+| review_summary | Summary of customer reviews or sentiment |
+| comparison_table | Comparison against similar products, competitors, prices, or ratings |
+| alternative_recommendation | Rufus recommends a different product or explains why this product is not ideal |
+| price_history | Current or historical price information |
+| activity_fit | Suitability for an activity, sport, venue, rule context, or occasion |
+| mixed | More than one answer shape is materially present |
+
+## Answer Confidence Labels
+
+Use one confidence label for every answer summary:
+
+| label | Meaning |
+| --- | --- |
+| high | Full answer is visible and product identity is clear |
+| medium | Answer is visible but may be truncated, generalized, or missing minor context |
+| low | Answer is partial, screenshot text is hard to read, or product identity is uncertain |
+| none | No answer was captured |
 
 ## Priority Scoring
 
@@ -73,6 +115,10 @@ Use these issue labels in the report:
 - `comparison_gap`: User lacks objective comparison points for recurring Rufus comparison questions.
 - `visual_gap`: The best answer should be visual but no image/video covers it.
 - `claim_risk`: Proposed answer could create compliance risk and needs careful wording.
+- `capture_gap`: The capture is incomplete, so no Listing conclusion should be made yet.
+- `product_fit_unclear`: Competitor concern may not apply to the user's product without more product details.
+- `rufus_redirect_risk`: Rufus recommends an alternative product because the audited product is weak for the asked use case.
+- `review_signal_gap`: Rufus relies on customer review language that the Listing does not make explicit in controlled content.
 
 ## Recommendation Tone
 
