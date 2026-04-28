@@ -13,7 +13,8 @@ Use this reference when a Rufus capture run returns incomplete rows, missing ans
 | Same question repeats many times | Rufus follow-up loop or duplicate starter questions | `capture_status=duplicate`, link to kept row in notes |
 | Answer talks about a different item | Sponsored module, comparison drift, or page state drift | `capture_status=out_of_scope` |
 | Answer is generic category advice | Rufus did not ground the answer in the current ASIN | `answer_confidence=low`, `concern_scope=category_concern` |
-| Browser asks for login, CAPTCHA, or permission | Access barrier | Stop and ask the user before solving CAPTCHA or logging in if not already approved |
+| Browser asks for login or OTP/TOTP | Access barrier with possible pre-authorized workflow | Use approved login/OTP workflow if supplied; otherwise stop and ask the user |
+| Browser shows CAPTCHA, robot check, or account security warning | Platform security challenge | Do not attempt automated bypass; use approved human-in-the-loop workflow or stop |
 | Persona settings are needed | Amazon profile change would transmit persona data | Ask for explicit confirmation before typing profile/persona details |
 
 ## Capture Repair Checklist
@@ -32,6 +33,8 @@ When capture quality is poor:
 ## Automation Guardrails
 
 - Take a Listing snapshot and create a question plan before submitting custom questions.
+- For VPS runs, process one ASIN at a time in one visible browser session and write resumable state after every answered question.
+- Use pre-authorized login and OTP/TOTP workflows only through approved secret channels; never log credentials, cookies, OTP seeds, or one-time codes.
 - Identify the real Rufus submit button. A known good selector can be `#rufus-submit-button`, but still verify it is inside the Rufus input form and has submit behavior.
 - Do not click header buttons or generic buttons near the Rufus panel unless their role is confirmed.
 - Submit only one question at a time.
