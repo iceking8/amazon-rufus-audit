@@ -15,6 +15,7 @@ Use this reference when a Rufus capture run returns incomplete rows, missing ans
 | Answer is generic category advice | Rufus did not ground the answer in the current ASIN | `answer_confidence=low`, `concern_scope=category_concern` |
 | Browser is not logged into an Amazon buyer account | Amazon buyer login is required before Rufus appears | Stop capture, save `login_status=not_logged_in`, ask human for approved buyer login method |
 | Browser asks for login or OTP/TOTP | Access barrier with possible pre-authorized workflow | Use approved login/OTP workflow if supplied; otherwise stop and ask the user |
+| Amazon shows "Add a mobile number" or mobile verification | Account security verification is blocking the buyer account session | Stop capture, save `challenge_type=mobile_number_required`, ask human for phone number, then ask for SMS code |
 | Browser shows CAPTCHA, robot check, or account security warning | Platform security challenge | Do not attempt automated bypass; use approved human-in-the-loop workflow or stop |
 | Many repeated CDP/websocket probe turns appear with no answers | Automation is polling without state progress | Stop after repeated no-change checks, save current state, report blocker |
 | Capture process crashes with `EOFError` while reading input | A script used terminal stdin or `input()` in a background/non-interactive run | Remove blocking prompts; use chat/user-facing replies or non-interactive defaults |
@@ -38,6 +39,7 @@ When capture quality is poor:
 - Take a Listing snapshot and create a question plan before submitting custom questions.
 - For automated browser runs, process one ASIN at a time in one browser session and write resumable state after every answered question.
 - Verify Amazon buyer login before Listing or Rufus capture. If logged out, stop and ask for the approved buyer login method instead of probing pages.
+- If Amazon asks to add a mobile number, stop Rufus capture, request the phone number from the human, submit it, report `已添加手机号`, request the received SMS code, submit it, verify the challenge clears, then resume.
 - After the full requested capture run is complete, save final state and close the browser so it does not remain running in the background.
 - Do not use blocking terminal prompts such as Python `input()` for confirmations, overwrite checks, login codes, or human intervention.
 - Keep CDP/websocket polling internal. Give user-facing progress only at meaningful milestones or blockers.
