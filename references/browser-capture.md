@@ -2,7 +2,7 @@
 
 Use this reference when automating Rufus Q&A capture through a browser, CDP, Playwright, or another UI automation layer.
 
-For login-required capture, also follow [account-safety.md](account-safety.md). If the agent is already running in a VPS/Xvfb browser runtime, use [vps-browser-capture.md](vps-browser-capture.md) as optional runtime-specific guidance.
+For login-required capture, also follow [account-safety.md](account-safety.md).
 
 ## Pre-Capture Listing Snapshot
 
