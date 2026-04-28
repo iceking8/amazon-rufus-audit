@@ -129,7 +129,6 @@ Make recommendations practical and placement-specific. Prefer "add an FAQ image 
 - [references/audit-workflow.md](references/audit-workflow.md): Detailed capture, comparison, and retest workflow.
 - [references/product-profiling.md](references/product-profiling.md): Required Listing-read gate and product-aware question planning.
 - [references/browser-capture.md](references/browser-capture.md): Browser automation guardrails for Rufus chat collection.
-- [references/vps-browser-capture.md](references/vps-browser-capture.md): Optional notes for low-frequency VPS/Xvfb runs after the agent has already identified that runtime.
 - [references/account-safety.md](references/account-safety.md): Pre-authorized login, OTP/TOTP handling, secret hygiene, and human-intervention rules.
 - [references/question-taxonomy.md](references/question-taxonomy.md): Question categories, priority scoring, and coverage labels.
 - [references/output-schema.md](references/output-schema.md): Tables and report structure to use in deliverables.
