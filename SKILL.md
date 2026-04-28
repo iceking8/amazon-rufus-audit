@@ -34,7 +34,7 @@ Ask for only the missing information needed for the requested depth:
 - Optional persona labels for analysis, such as "parents with young kids", "minimalist home office", or "price-sensitive buyer".
 - Optional pre-authorized Amazon login and OTP/TOTP workflow, supplied outside the skill through secrets or environment variables.
 
-If a task requires Amazon login, first check whether the user supplied a pre-authorized login and verification workflow. Use that workflow only for the user's own account and never print credentials, cookies, OTP seeds, or one-time codes. If no workflow is available, ask for human help through the agent's normal user-facing reply, not through terminal stdin or blocking `input()` prompts. If a task requires typing persona details into Amazon profile features such as "Tell us about you", stop and ask for explicit confirmation through the chat/user interface before entering that data. Prefer labeling personas in the audit table without changing the user's Amazon account profile.
+If a task requires Amazon login, first check whether the user supplied a pre-authorized login and verification workflow. Use that workflow only for the user's own account and never print credentials, cookies, OTP seeds, or one-time codes. If the browser is not logged into an Amazon buyer account and no usable login workflow is available, stop all capture actions and ask for the Amazon buyer login method through the agent's normal user-facing reply or approved secret channel, not through terminal stdin or blocking `input()` prompts. If a task requires typing persona details into Amazon profile features such as "Tell us about you", stop and ask for explicit confirmation through the chat/user interface before entering that data. Prefer labeling personas in the audit table without changing the user's Amazon account profile.
 
 ## Workflow
 
@@ -43,6 +43,7 @@ If a task requires Amazon login, first check whether the user supplied a pre-aut
    - Identify each competitor as `competitor_1`, `competitor_2`, etc.
    - Record marketplace, ASIN, URL, capture date, and persona label.
    - For automated browser collection, use a single account, process one ASIN at a time, keep one active browser session, and save resumable state.
+   - Before any Rufus or Listing capture, verify the active browser is logged into an Amazon buyer account. If `login_status=not_logged_in`, save a blocker state, send a user-facing message requesting the Amazon buyer account credentials and verification workflow through an approved channel, and stop.
    - Never use blocking terminal prompts such as Python `input()` for confirmations, overwrite checks, login codes, or human intervention. Use the agent's normal user-facing reply or a non-interactive default.
 
 2. Build product profile and collect Rufus Q&A.
@@ -57,6 +58,7 @@ If a task requires Amazon login, first check whether the user supplied a pre-aut
    - If automating the Rufus chat input, use the actual Rufus submit control, not nearby header buttons. See [references/browser-capture.md](references/browser-capture.md).
    - Collect new follow-up questions generated after each answer.
    - Continue breadth-first until the user-requested depth is reached, the panel stops producing useful new questions, or the audit has enough coverage.
+   - If the requested depth cannot be reached because no new valid questions or answers appear, save the rows collected so far and report the stopping reason instead of polling indefinitely.
    - Deduplicate near-identical questions, but keep materially different wording when it reveals a different buyer concern.
 
 3. Validate capture quality.
