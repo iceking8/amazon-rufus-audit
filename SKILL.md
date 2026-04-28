@@ -32,8 +32,9 @@ Ask for only the missing information needed for the requested depth:
 - Product category and target buyer if not obvious.
 - Existing Listing content, screenshots, or exported page text when browser access is unavailable.
 - Optional persona labels for analysis, such as "parents with young kids", "minimalist home office", or "price-sensitive buyer".
+- Optional pre-authorized Amazon login and OTP/TOTP workflow, supplied outside the skill through secrets or environment variables.
 
-If a task requires typing persona details into Amazon profile features such as "Tell us about you", stop and ask for explicit confirmation before entering that data. Prefer labeling personas in the audit table without changing the user's Amazon account profile.
+If a task requires Amazon login, first check whether the user supplied a pre-authorized login and verification workflow. Use that workflow only for the user's own account and never print credentials, cookies, OTP seeds, or one-time codes. If no workflow is available, ask for human help. If a task requires typing persona details into Amazon profile features such as "Tell us about you", stop and ask for explicit confirmation before entering that data. Prefer labeling personas in the audit table without changing the user's Amazon account profile.
 
 ## Workflow
 
@@ -41,6 +42,7 @@ If a task requires typing persona details into Amazon profile features such as "
    - Identify the user's product as `own`.
    - Identify each competitor as `competitor_1`, `competitor_2`, etc.
    - Record marketplace, ASIN, URL, capture date, and persona label.
+   - For VPS or headless-style browser collection, confirm the run will use a single account, single ASIN at a time, one visible browser session, and a resumable state file. See [references/vps-browser-capture.md](references/vps-browser-capture.md).
 
 2. Build product profile and collect Rufus Q&A.
    - Before submitting custom questions, read visible Listing content and build a product profile: title, brand, price, rating, bullets, product details, variant options, image callouts, A+ content, Q&A, and review themes when available.
@@ -127,6 +129,8 @@ Make recommendations practical and placement-specific. Prefer "add an FAQ image 
 - [references/audit-workflow.md](references/audit-workflow.md): Detailed capture, comparison, and retest workflow.
 - [references/product-profiling.md](references/product-profiling.md): Required Listing-read gate and product-aware question planning.
 - [references/browser-capture.md](references/browser-capture.md): Browser automation guardrails for Rufus chat collection.
+- [references/vps-browser-capture.md](references/vps-browser-capture.md): Ubuntu, Chrome, and Xvfb collection rules for low-frequency VPS runs.
+- [references/account-safety.md](references/account-safety.md): Pre-authorized login, OTP/TOTP handling, secret hygiene, and human-intervention rules.
 - [references/question-taxonomy.md](references/question-taxonomy.md): Question categories, priority scoring, and coverage labels.
 - [references/output-schema.md](references/output-schema.md): Tables and report structure to use in deliverables.
 - [references/troubleshooting.md](references/troubleshooting.md): Rufus capture failure modes and how to report them.
