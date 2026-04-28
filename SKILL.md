@@ -1,6 +1,6 @@
 ---
 name: amazon-rufus-audit
-description: Amazon Rufus competitor Q&A audit for sellers. Use when Codex needs to collect, clean, validate, or analyze Rufus questions and answers from competitor or own Amazon product pages; diagnose capture problems; classify buyer concerns; compare those questions against the user's Listing content; find weak or missing answers; and produce prioritized image, A+, FAQ, bullet, and title optimization recommendations. Trigger on requests mentioning Rufus 问答采集, Rufus 拆解, 竞品 Rufus 分析, Listing gap analysis, AI-ready Listing, Amazon Rufus audit, Rufus capture troubleshooting, or comparing competitor Rufus answers with the user's product link.
+description: Amazon Rufus competitor Q&A audit for sellers. Use when Codex needs to read Amazon Listing content, build a product profile, generate product-aware Rufus question plans, collect, clean, validate, or analyze Rufus questions and answers from competitor or own product pages; diagnose capture problems; classify buyer concerns; compare those questions against the user's Listing content; find weak or missing answers; and produce prioritized image, A+, FAQ, bullet, and title optimization recommendations. Trigger on requests mentioning Rufus 问答采集, Rufus 拆解, 竞品 Rufus 分析, Listing gap analysis, AI-ready Listing, Amazon Rufus audit, Rufus capture troubleshooting, or comparing competitor Rufus answers with the user's product link.
 ---
 
 # Amazon Rufus Audit
@@ -9,15 +9,16 @@ description: Amazon Rufus competitor Q&A audit for sellers. Use when Codex needs
 
 Use this skill to turn Rufus Q&A from competitor and own Amazon product pages into a repeatable Listing optimization workflow. The goal is not to manipulate Rufus; the goal is to discover buyer concerns Rufus can see, compare content coverage, and decide what to strengthen in the user's Listing.
 
-For every run, separate the work into two phases: capture validation first, Listing gap analysis second. Do not perform gap analysis on incomplete captures unless the gaps are clearly supported by available evidence.
+For every run, separate the work into three phases: product profiling first, capture validation second, Listing gap analysis third. Do not collect only generic questions when product-specific Listing signals are available. Do not perform gap analysis on incomplete captures unless the gaps are clearly supported by available evidence.
 
 ## Core Principle
 
-Treat Rufus Q&A as buyer-intent evidence. A useful audit answers three questions:
+Treat Rufus Q&A as buyer-intent evidence. A useful audit answers four questions:
 
 1. What questions does Rufus surface on competitor pages?
-2. Does the user's Listing answer the same concerns clearly and credibly?
-3. Which missing or weak answers should be fixed in images, A+, FAQ, bullets, title, or review-generation strategy?
+2. What product-specific questions should be asked based on the Listing's title, bullets, images, A+, reviews, specifications, and category?
+3. Does the user's Listing answer the same concerns clearly and credibly?
+4. Which missing or weak answers should be fixed in images, A+, FAQ, bullets, title, or review-generation strategy?
 
 Do not promise ranking control, Rufus manipulation, or guaranteed recommendation outcomes. Phrase recommendations as content coverage and conversion-risk improvements.
 
@@ -41,9 +42,14 @@ If a task requires typing persona details into Amazon profile features such as "
    - Identify each competitor as `competitor_1`, `competitor_2`, etc.
    - Record marketplace, ASIN, URL, capture date, and persona label.
 
-2. Collect Rufus Q&A.
+2. Build product profile and collect Rufus Q&A.
+   - Before submitting custom questions, read visible Listing content and build a product profile: title, brand, price, rating, bullets, product details, variant options, image callouts, A+ content, Q&A, and review themes when available.
+   - Create a product-aware question plan that combines Rufus visible starter questions with generated questions based on product features, use cases, materials, sizing, compatibility, care, limits, and likely buyer objections.
+   - Mark each planned question with `question_origin`: `rufus_starter`, `rufus_followup`, `product_profile_generated`, `category_coverage_generated`, or `user_supplied`.
+   - See [references/product-profiling.md](references/product-profiling.md) for the required profiling gate and question-plan structure.
    - Open each product page and locate the Rufus panel or Rufus Q&A area.
    - Capture the visible starter questions.
+   - Ask product-profile-generated questions only after starter questions are saved, unless the user specifically asks for a targeted capture.
    - Submit or click exactly one question at a time, wait for the answer to stabilize, then record the question and answer.
    - If automating the Rufus chat input, use the actual Rufus submit control, not nearby header buttons. See [references/browser-capture.md](references/browser-capture.md).
    - Collect new follow-up questions generated after each answer.
@@ -56,6 +62,7 @@ If a task requires typing persona details into Amazon profile features such as "
    - Every incomplete row must include `failure_reason`, such as Rufus not visible, answer did not load, CAPTCHA/login wall, page mismatch, repeated question, or off-topic recommendation.
    - Any row stuck on `Thinking...` must be recovered or marked incomplete; do not continue submitting new questions into a stuck conversation.
    - If more than 30% of rows are incomplete, output a Capture Health section before any analysis.
+   - If product profiling could not be completed, state what Listing evidence was unavailable and avoid over-targeted conclusions.
    - If only competitor data is available, produce competitor insight and question taxonomy, but do not claim the user's Listing has gaps.
 
 4. Normalize the dataset.
@@ -76,6 +83,7 @@ If a task requires typing persona details into Amazon profile features such as "
 
 7. Produce the audit report.
    - Start with capture health if there were missing answers, blocked pages, duplicates, or unsupported conclusions.
+   - Include the product profile and question-plan logic when the task involves fresh collection or troubleshooting.
    - Start with the top priority gaps.
    - Then provide the full Rufus Q&A matrix.
    - Then provide concrete optimization actions by placement: images, A+, FAQ, bullets, title, description, review strategy.
@@ -103,6 +111,8 @@ When browser access is unavailable, accept pasted Rufus Q&A, screenshots, HTML e
 Use the detailed schemas in [references/output-schema.md](references/output-schema.md). At minimum, produce:
 
 - Capture health summary.
+- Product profile summary.
+- Question plan with question origins.
 - Rufus Q&A baseline table.
 - Competitor concern map.
 - Own Listing coverage matrix.
@@ -115,6 +125,7 @@ Make recommendations practical and placement-specific. Prefer "add an FAQ image 
 ## Reference Files
 
 - [references/audit-workflow.md](references/audit-workflow.md): Detailed capture, comparison, and retest workflow.
+- [references/product-profiling.md](references/product-profiling.md): Required Listing-read gate and product-aware question planning.
 - [references/browser-capture.md](references/browser-capture.md): Browser automation guardrails for Rufus chat collection.
 - [references/question-taxonomy.md](references/question-taxonomy.md): Question categories, priority scoring, and coverage labels.
 - [references/output-schema.md](references/output-schema.md): Tables and report structure to use in deliverables.
