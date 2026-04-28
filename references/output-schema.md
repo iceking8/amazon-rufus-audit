@@ -158,6 +158,9 @@ Add **Capture Health** before Executive Summary when any row is not `answered`:
 - Rows excluded from analysis.
 - Main failure reasons.
 - Whether the dataset is strong enough for gap analysis.
+- Whether capture stopped because the browser was not logged into an Amazon buyer account or because no state progress was detected.
+
+Common `failure_reason` values include `amazon_buyer_login_required`, `no_preauthorized_verification_workflow`, `rufus_not_visible`, `thinking_timeout`, `no_state_progress`, `target_depth_unreachable`, and `page_mismatch`.
 
 ## CSV Header
 
