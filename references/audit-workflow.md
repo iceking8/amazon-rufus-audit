@@ -17,26 +17,81 @@ Choose the mode that matches the user's available data:
    - Use when the user has an earlier Rufus baseline table.
    - Compare old vs new questions, answer tone, coverage, and unresolved risks.
 
+## Product Profiling Gate
+
+Before fresh Rufus collection, create a product profile for every ASIN that has accessible Listing content. This is a required gate, not an optional analysis step.
+
+Read available Listing evidence in this order:
+
+1. Title, brand, price, rating, review count, and variant options.
+2. Bullets, product details, and technical specifications.
+3. Main image and secondary image callouts.
+4. Product description, video, A+ content, and comparison charts.
+5. Existing Amazon Q&A and review themes.
+
+Extract:
+
+- product type,
+- target buyer,
+- core use cases,
+- key features,
+- materials, size, capacity, compatibility, ingredients, or technical specs,
+- variants,
+- proof points,
+- likely objections,
+- product limits,
+- missing Listing evidence.
+
+Use [product-profiling.md](product-profiling.md) for the complete field list and question-plan rules.
+
+If the page blocks Listing content, record `profile_status=partial` or `blocked` and continue with visible Rufus questions only. Do not invent product-specific questions from the ASIN alone.
+
+## Question Plan Gate
+
+Create the planned question pool before submitting custom questions into Rufus.
+
+Use these origins:
+
+- `rufus_starter`: visible Rufus starter question.
+- `rufus_followup`: Rufus-generated follow-up question.
+- `product_profile_generated`: question derived from observed Listing content.
+- `category_coverage_generated`: category-standard question used to fill a blind spot.
+- `user_supplied`: user-provided test question.
+
+Ordering:
+
+1. Save all visible starter questions first.
+2. Ask or click high-priority starter questions.
+3. Add follow-ups breadth-first.
+4. Ask product-profile-generated questions that cover missing high-risk concerns.
+5. Ask category-coverage questions only when they are relevant to the product profile.
+
+Do not ask irrelevant template questions just because they exist in the taxonomy.
+
 ## Capture Procedure
 
 For each product page:
 
 1. Record `marketplace`, `asin`, `brand`, `product_title`, `url`, `capture_date`, and `persona_label`.
-2. Locate the Rufus panel or Rufus Q&A area.
-3. Capture every visible starter question before clicking anything.
-4. Click one question at a time.
-5. Wait until the answer and follow-up questions stop changing.
-6. Record:
+2. Build or update the product profile from visible Listing content.
+3. Create the question plan and mark each question's origin.
+4. Locate the Rufus panel or Rufus Q&A area.
+5. Capture every visible starter question before clicking anything.
+6. Click or submit one question at a time.
+7. Wait until the answer and follow-up questions stop changing.
+8. Record:
    - clicked question
    - Rufus answer
    - follow-up questions
+   - question origin
+   - product profile signal
    - source depth
    - visible evidence references, if any
-7. Repeat breadth-first:
+9. Repeat breadth-first:
    - depth 0: starter questions
    - depth 1: follow-ups after starter questions
    - depth 2: follow-ups after follow-ups
-8. Stop when:
+10. Stop when:
    - requested question count is reached,
    - two consecutive clicks produce no new useful questions,
    - the questions become off-topic,
@@ -100,6 +155,7 @@ Use this queue logic conceptually:
 
 ```text
 queue = visible starter questions
+append high-priority product-profile questions after starter questions are recorded
 seen = normalized question text
 
 while queue is not empty and limit not reached:
@@ -124,6 +180,8 @@ Use these distinctions:
 - **Unsupported gap**: The user's Listing was not provided or the capture lacks enough evidence.
 
 Never turn a competitor-specific answer into a recommendation for the user's Listing without checking product fit.
+
+When a question came from product profiling, tie the interpretation back to the profile signal. For example, if the Listing says "built-in shorts", a pockets or coverage question is product-relevant; if the profile has no sport or dress-code evidence, a formal-golf suitability question may be exploratory rather than a confirmed gap.
 
 ## Observed Rufus Answer Types
 
