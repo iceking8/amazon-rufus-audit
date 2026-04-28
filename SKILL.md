@@ -90,6 +90,7 @@ If a task requires Amazon login, first check whether the user supplied a pre-aut
    - Then provide the full Rufus Q&A matrix.
    - Then provide concrete optimization actions by placement: images, A+, FAQ, bullets, title, description, review strategy.
    - Include a retest plan, usually 3 months and 6 months after material Listing changes.
+   - After all requested capture and report work is complete, save final state and close the browser session so it does not remain running in the background.
 
 ## Capture Guidance
 
