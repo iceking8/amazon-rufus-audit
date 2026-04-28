@@ -24,9 +24,10 @@ When a login or verification challenge appears:
 3. If Amazon asks for an OTP/TOTP or email/SMS login code, check whether the user supplied an approved way to retrieve that code, such as a local TOTP secret, a pre-authorized OTP helper, or a user-provided verification service.
 4. Use the code only for the current login attempt.
 5. Record only non-sensitive metadata, such as `verification_action=preauthorized_otp_used`.
-6. If the approved workflow fails, stop and ask for human help.
+6. If the approved workflow fails, stop and ask for human help through the agent's normal user-facing reply.
 
 Do not expose or persist the OTP/TOTP secret. Do not include the verification provider credentials in the skill or repository.
+Do not use terminal stdin, Python `input()`, or other blocking prompts for credentials, OTP codes, overwrite confirmations, or human intervention.
 
 ## Challenge Types
 
