@@ -53,6 +53,20 @@ Use one capture status for every collected row:
 | duplicate | Question is a near duplicate of a stronger existing row |
 | out_of_scope | Question or answer refers to another product, sponsored content, general category advice, or non-buyer intent |
 
+## Question Origin Labels
+
+Use one origin for every question:
+
+| label | Meaning |
+| --- | --- |
+| rufus_starter | Rufus displayed the question before any interaction |
+| rufus_followup | Rufus displayed the question after a prior answer |
+| product_profile_generated | The agent generated the question from observed Listing/product signals |
+| category_coverage_generated | The agent generated the question from category-standard coverage checks |
+| user_supplied | The user explicitly asked to test this question |
+
+Generated questions must include a `profile_signal` unless the origin is `category_coverage_generated` and the question is clearly category-standard.
+
 ## Answer Type Labels
 
 Use one answer type for every answered row:
@@ -85,6 +99,7 @@ Score each question from 1 to 5.
 Start at 1, then add points:
 
 - +1 if it affects purchase confidence or conversion.
+- +1 if it is directly tied to a product profile signal, such as a claimed feature, material, use case, variant, or likely objection.
 - +1 if it appears on multiple competitor pages or repeats in different wording.
 - +1 if it relates to negative reviews, durability, safety, compatibility, sizing, or product limits.
 - +1 if the user's coverage is `missing`, `weak`, `review_only`, or `contradicted`.
