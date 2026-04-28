@@ -4,6 +4,20 @@ Use this reference when automating Rufus Q&A capture through a browser, CDP, Pla
 
 For login-required capture, also follow [account-safety.md](account-safety.md).
 
+## Login State Gate
+
+Before reading Listing content or searching for Rufus, verify that the active marketplace browser session is logged into an Amazon buyer account. Use browser-visible signals such as a sign-in page, a "Hello, sign in" header, an account sign-in call-to-action, or a login redirect as evidence of `login_status=not_logged_in`.
+
+If the browser is not logged in:
+
+1. Stop all Rufus, Listing, and tab-scanning actions immediately.
+2. Save a blocker state with `login_status=not_logged_in`, `challenge_type=login_required`, and `failure_reason=amazon_buyer_login_required`.
+3. Send a normal user-facing message asking for the Amazon buyer account login method, including account/password and any OTP/TOTP workflow, through the agent's approved secret or chat channel.
+4. Do not use terminal stdin, `input()`, or background prompts.
+5. Close the capture-owned browser session unless the user is actively completing a manual login in that session.
+
+If a pre-authorized login workflow exists, use it once, verify `login_status=logged_in`, and continue. If login still fails, save the blocker and stop instead of retrying in a loop.
+
 ## Pre-Capture Listing Snapshot
 
 Before interacting with Rufus, save the visible Listing context needed for product profiling:
@@ -41,6 +55,7 @@ Automation must follow this state machine:
 
 ```text
 ready
+  -> login_state_check
   -> listing_snapshot
   -> product_profile
   -> question_plan
@@ -51,6 +66,11 @@ ready
   -> capture_followups
   -> ready
   -> final_save
+  -> close_browser
+
+not_logged_in
+  -> blocker_save
+  -> user_message_for_login
   -> close_browser
 ```
 
@@ -69,6 +89,22 @@ Consider an answer stable only when:
 - follow-up prompts have appeared or the UI has stopped updating.
 
 If the answer is long, such as a comparison table, use longer wait windows and capture the full raw text.
+
+## Progress and Loop Limits
+
+Do not expose every CDP, websocket, DOM poll, or browser probe as a user-facing progress update. Keep those checks internal and report progress only at meaningful milestones: login verified, product profile saved, question plan built, every 5 answered rows, a blocker, or final completion.
+
+Treat progress as one of these state changes:
+
+- a login state change,
+- a completed Listing snapshot,
+- a saved product profile,
+- a new planned question,
+- a new answered Rufus row,
+- new follow-up prompts,
+- a saved blocker or final report.
+
+If three consecutive browser checks produce no state change, or if no new answered row appears within a reasonable timeout for the environment, stop the loop, save current results, and report the blocker. If the requested depth, such as 30 questions, cannot be reached because Rufus stops producing valid new questions or answers, report the exact collected count and reason.
 
 ## Stuck Conversation Recovery
 
