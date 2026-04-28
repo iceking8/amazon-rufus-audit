@@ -29,6 +29,8 @@ When a login or verification challenge appears:
 Do not expose or persist the OTP/TOTP secret. Do not include the verification provider credentials in the skill or repository.
 Do not use terminal stdin, Python `input()`, or other blocking prompts for credentials, OTP codes, overwrite confirmations, or human intervention.
 
+If the browser is not logged into an Amazon buyer account and no approved login workflow is available, stop all capture work and ask the human for the Amazon buyer account login method through the normal user-facing or secret channel. Do not keep probing product pages or Rufus while logged out.
+
 ## Challenge Types
 
 Treat challenges differently:
@@ -44,8 +46,10 @@ Treat challenges differently:
 Allowed:
 
 - `logged_in=true`
+- `login_status=not_logged_in`
 - `verification_action=preauthorized_otp_used`
 - `challenge_type=otp_or_totp_required`
+- `failure_reason=amazon_buyer_login_required`
 - `capture_status=blocked`
 - `failure_reason=no_preauthorized_verification_workflow`
 
