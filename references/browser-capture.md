@@ -48,9 +48,13 @@ ready
   -> capture_answer
   -> capture_followups
   -> ready
+  -> final_save
+  -> close_browser
 ```
 
 Never enter `submit_one_question` while a previous question is in `waiting_for_thinking` or `waiting_for_answer_stable`.
+
+When all requested ASINs and questions are complete, save the final state and close the browser session. Preserve the browser profile or saved session only when needed for future login reuse; do not keep the browser process running in the background.
 
 ## Answer Stabilization
 
@@ -91,6 +95,15 @@ Capture more than just a short summary:
 - prices or price history ranges,
 - whether Rufus recommends a different product,
 - capture status and recovery action.
+
+## Browser Cleanup
+
+At the end of a completed capture run:
+
+1. Confirm the latest answer rows, profile, question plan, and capture health summary have been saved.
+2. Close the active browser page/session.
+3. Confirm no capture-owned browser process is intentionally left running.
+4. If the run ended early because of a blocker, save the blocker state before closing the browser.
 
 ## Known Rufus Answer Patterns
 
