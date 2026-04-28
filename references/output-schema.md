@@ -59,8 +59,8 @@ Use this table for raw and normalized capture results:
 | persona_label | yes | `default` if no persona was used |
 | run_environment | no | browser, remote_browser, pasted_data, screenshot, etc. |
 | login_status | no | logged_in, not_logged_in, unknown |
-| challenge_type | no | none, login_required, otp_or_totp_required, email_or_sms_code_required, captcha_or_robot_check, account_security_warning |
-| verification_action | no | none, preauthorized_login_used, preauthorized_otp_used, human_intervention_needed |
+| challenge_type | no | none, login_required, otp_or_totp_required, email_or_sms_code_required, mobile_number_required, mobile_number_code_required, captcha_or_robot_check, account_security_warning |
+| verification_action | no | none, preauthorized_login_used, preauthorized_otp_used, human_phone_submitted, human_sms_code_submitted, human_intervention_needed |
 | source_depth | yes | `0` starter, `1` follow-up, `2` deeper follow-up |
 | parent_question_id | no | Link follow-up to parent question |
 | clicked_path | no | Question path, such as `Q001 > Q004` |
@@ -158,9 +158,9 @@ Add **Capture Health** before Executive Summary when any row is not `answered`:
 - Rows excluded from analysis.
 - Main failure reasons.
 - Whether the dataset is strong enough for gap analysis.
-- Whether capture stopped because the browser was not logged into an Amazon buyer account or because no state progress was detected.
+- Whether capture stopped because the browser was not logged into an Amazon buyer account, Amazon required mobile number verification, or no state progress was detected.
 
-Common `failure_reason` values include `amazon_buyer_login_required`, `no_preauthorized_verification_workflow`, `rufus_not_visible`, `thinking_timeout`, `no_state_progress`, `target_depth_unreachable`, and `page_mismatch`.
+Common `failure_reason` values include `amazon_buyer_login_required`, `mobile_number_verification_required`, `mobile_number_code_required`, `mobile_number_verification_failed`, `no_preauthorized_verification_workflow`, `rufus_not_visible`, `thinking_timeout`, `no_state_progress`, `target_depth_unreachable`, and `page_mismatch`.
 
 ## CSV Header
 
