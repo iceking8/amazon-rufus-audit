@@ -1,5 +1,49 @@
 # Rufus Audit Output Schema
 
+## Product Profile Table
+
+Use this table before Rufus capture when Listing content is available:
+
+| field | Required | Notes |
+| --- | --- | --- |
+| profile_id | yes | Stable id, such as `C1-PROFILE` |
+| capture_date | yes | ISO date preferred |
+| marketplace | yes | US, UK, DE, CA, etc. |
+| product_role | yes | `own`, `competitor_1`, `competitor_2`, etc. |
+| asin | yes | Use `unknown` if unavailable |
+| product_url | yes | Source URL |
+| profile_status | yes | complete, partial, blocked |
+| product_type | yes | Plain-language product identity |
+| target_buyer | no | Target persona or use case |
+| core_use_cases | no | Main scenarios |
+| key_features | no | Listing-supported feature claims |
+| materials_or_specs | no | Materials, sizing, compatibility, capacity, ingredients, care, or technical specs |
+| variants | no | Colors, sizes, pack counts, models, bundles, scents, etc. |
+| proof_points | no | Ratings, review themes, image callouts, certifications, warranty, tests |
+| likely_objections | no | Buyer concerns inferred from the Listing and category |
+| product_limits | no | Limits, exclusions, non-fit use cases, or uncertainty |
+| missing_listing_evidence | no | Facts that would help ask or answer Rufus questions but were not visible |
+| profile_sources | yes | title, bullets, images, A+, specs, Q&A, reviews, screenshots, pasted_text |
+
+## Question Plan Table
+
+Use this table to show why each Rufus question is being collected:
+
+| field | Required | Notes |
+| --- | --- | --- |
+| planned_question_id | yes | Stable id, such as `C1-PQ001` |
+| product_role | yes | `own`, `competitor_1`, etc. |
+| asin | yes | Source ASIN |
+| question_text | yes | Exact question to click or submit |
+| question_origin | yes | rufus_starter, rufus_followup, product_profile_generated, category_coverage_generated, user_supplied |
+| profile_signal | conditional | Listing signal that caused the question; required for generated questions |
+| target_category | yes | From question taxonomy |
+| priority_score | yes | 1-5 |
+| ask_order | yes | Recommended order |
+| expected_evidence_type | no | feature, review, comparison, price, spec, use_case, limitation |
+| ask_decision | yes | ask, save_only, skip_duplicate, skip_irrelevant |
+| decision_reason | no | Why it was asked, saved, or skipped |
+
 ## Rufus Q&A Baseline Table
 
 Use this table for raw and normalized capture results:
@@ -16,6 +60,9 @@ Use this table for raw and normalized capture results:
 | source_depth | yes | `0` starter, `1` follow-up, `2` deeper follow-up |
 | parent_question_id | no | Link follow-up to parent question |
 | clicked_path | no | Question path, such as `Q001 > Q004` |
+| planned_question_id | no | Link to the question plan row when available |
+| question_origin | yes | rufus_starter, rufus_followup, product_profile_generated, category_coverage_generated, user_supplied |
+| profile_signal | no | Product profile signal that caused the question |
 | capture_status | yes | answered, question_only, blocked, duplicate, out_of_scope |
 | failure_reason | no | Required when status is not answered |
 | raw_question | yes | Preserve original wording |
@@ -70,18 +117,23 @@ Deliver reports in this order:
    - Top 3 to 5 content gaps.
    - Biggest competitor advantage.
 
-2. **Priority Fixes**
+2. **Product Profile and Question Plan**
+   - Product type, target buyer, core use cases, key features, likely objections, and limits.
+   - Count of questions by origin.
+   - Any high-priority generated questions that Rufus answered weakly or redirected.
+
+3. **Priority Fixes**
    - Critical and high priority rows only.
    - Include exact placement recommendations.
 
-3. **Rufus Concern Map**
+4. **Rufus Concern Map**
    - Group questions by category.
    - Show which competitors surface each concern.
 
-4. **Own Listing Gap Matrix**
+5. **Own Listing Gap Matrix**
    - Full matrix using the coverage fields above.
 
-5. **Optimization Plan**
+6. **Optimization Plan**
    - Images: recommended image slots and callouts.
    - A+: module-level recommendations.
    - FAQ: questions and suggested answers.
@@ -89,7 +141,7 @@ Deliver reports in this order:
    - Title: only conservative changes unless the user asks for a full rewrite.
    - Review strategy: review themes to encourage through legitimate post-purchase experience, not manipulation.
 
-6. **Retest Plan**
+7. **Retest Plan**
    - What to recapture after 3 months and 6 months.
    - Which rows define success.
 
@@ -120,11 +172,11 @@ normalized_question,primary_category,priority_score,priority_label,own_coverage_
 For V2 capture files, prefer this expanded baseline header:
 
 ```csv
-capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_confidence,primary_category,secondary_categories,buyer_concern,competitor_strength,concern_scope,notes
+capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,planned_question_id,question_origin,profile_signal,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_confidence,primary_category,secondary_categories,buyer_concern,competitor_strength,concern_scope,notes
 ```
 
 For automation-heavy captures, use this full forensic header:
 
 ```csv
-capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_length_chars,answer_confidence,answer_type,follow_up_prompts,primary_category,secondary_categories,buyer_concern,competitor_strength,competitor_mentions,price_evidence,review_evidence_summary,concern_scope,recovery_action,notes
+capture_id,capture_date,marketplace,product_role,asin,product_url,persona_label,source_depth,parent_question_id,clicked_path,planned_question_id,question_origin,profile_signal,capture_status,failure_reason,raw_question,normalized_question,raw_answer,answer_summary,answer_length_chars,answer_confidence,answer_type,follow_up_prompts,primary_category,secondary_categories,buyer_concern,competitor_strength,competitor_mentions,price_evidence,review_evidence_summary,concern_scope,recovery_action,notes
 ```
