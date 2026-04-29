@@ -86,6 +86,10 @@ Use this table for raw and normalized capture results:
 | review_evidence_summary | no | Review themes Rufus cites or paraphrases |
 | concern_scope | yes | category_concern, competitor_specific, own_opportunity, unsupported_gap |
 | recovery_action | no | resume_response, reload_preserved_history, none, etc. |
+| submit_attempt_count | no | Number of submit attempts for this question |
+| submit_method | no | form_button, enter_key, cdp_keyboard, playwright_fill, click_only, etc. |
+| selector_strategy | no | id, role, form_scoped, text_scoped, dynamic_class_fallback, etc. |
+| timeout_stage | no | submit_acknowledgement, first_answer_text, answer_stabilization, followup_detection, recovery |
 | notes | no | Capture caveats |
 
 ## Own Listing Coverage Matrix
@@ -160,7 +164,7 @@ Add **Capture Health** before Executive Summary when any row is not `answered`:
 - Whether the dataset is strong enough for gap analysis.
 - Whether capture stopped because the browser was not logged into an Amazon buyer account, Amazon required mobile number verification, or no state progress was detected.
 
-Common `failure_reason` values include `amazon_buyer_login_required`, `mobile_number_verification_required`, `mobile_number_code_required`, `mobile_number_verification_failed`, `no_preauthorized_verification_workflow`, `rufus_not_visible`, `thinking_timeout`, `no_state_progress`, `target_depth_unreachable`, and `page_mismatch`.
+Common `failure_reason` values include `amazon_buyer_login_required`, `mobile_number_verification_required`, `mobile_number_code_required`, `mobile_number_verification_failed`, `no_preauthorized_verification_workflow`, `rufus_not_visible`, `submit_not_acknowledged`, `selector_verification_failed`, `first_answer_timeout`, `answer_stabilization_timeout`, `rufus_search_timeout`, `thinking_timeout`, `no_state_progress`, `target_depth_unreachable`, and `page_mismatch`.
 
 ## CSV Header
 
