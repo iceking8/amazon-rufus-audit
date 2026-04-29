@@ -67,6 +67,26 @@ Before sending questions, verify the actual Rufus submit control:
 
 Record the selector used in capture notes when possible.
 
+## React-Safe Question Submission
+
+Rufus is a React-driven UI. A plain DOM `el.click()` may not trigger the full event chain. Treat a submit as successful only after a new visible user-question turn appears in the Rufus conversation.
+
+Preferred sequence for typed questions:
+
+1. Focus the Rufus input.
+2. Set the input value through a browser-realistic path, such as native input property setter plus `input`/`change` events, Playwright `fill`, or CDP keyboard events.
+3. Dispatch realistic key or pointer events, such as `Enter`, `pointerdown`, `mousedown`, `mouseup`, and `click`, on the verified submit control.
+4. Verify the submitted question text appears as the latest user turn.
+5. If no new user turn appears, mark the attempt failed and retry with a different submit method before moving to the next question.
+
+Do not count a question as submitted only because a click call returned without error.
+
+Use a bounded retry budget:
+
+- Try up to 3 submit methods for a question: form submit control, Enter key, and CDP/Playwright user-like input.
+- Save `submit_attempt_count`, `submit_method`, and `failure_reason=submit_not_acknowledged` when all methods fail.
+- Keep the row as `question_only` or `blocked`; do not drop it silently.
+
 ## State Machine
 
 Automation must follow this state machine:
@@ -117,6 +137,22 @@ Consider an answer stable only when:
 
 If the answer is long, such as a comparison table, use longer wait windows and capture the full raw text.
 
+Do not wait for hard-coded strings such as `completed generating` unless they were observed in the current DOM. Use positive evidence from the current page: active answer container text, disappearance of `Thinking...`, response length stability, and no visible resume control.
+
+Do not use phrases such as "Would you like", "Would you like me to", or similar follow-up wording as answer stop markers. These phrases can be part of a valid Rufus answer. Capture the full answer text first, then parse follow-up prompts from separate prompt buttons or clearly separated UI regions.
+
+## Selector Strategy
+
+Avoid selectors based on Amazon's generated or dynamic class names, such as `.rufus-papyrus-turn`, unless the selector has been verified in the current page and has a fallback. Prefer stable signals:
+
+- element ids when present, such as `#rufus-submit-button`,
+- form relationships around the Rufus input,
+- roles, labels, accessible names, and button text,
+- DOM position relative to the verified input and latest user question,
+- text and structure checks scoped to the Rufus panel.
+
+Before collecting many rows, run one probe question and verify that selectors can identify: input, submit control, latest user question, active answer, follow-up prompts, and `Thinking...` or resume states. If selector verification fails, save a blocker instead of starting a large capture run.
+
 ## Progress and Loop Limits
 
 Do not expose every CDP, websocket, DOM poll, or browser probe as a user-facing progress update. Keep those checks internal and report progress only at meaningful milestones: login verified, product profile saved, question plan built, every 5 answered rows, a blocker, or final completion.
@@ -132,6 +168,16 @@ Treat progress as one of these state changes:
 - a saved blocker or final report.
 
 If three consecutive browser checks produce no state change, or if no new answered row appears within a reasonable timeout for the environment, stop the loop, save current results, and report the blocker. If the requested depth, such as 30 questions, cannot be reached because Rufus stops producing valid new questions or answers, report the exact collected count and reason.
+
+Use per-stage timeouts instead of one long undifferentiated wait:
+
+- submit acknowledgement timeout,
+- first answer text timeout,
+- answer stabilization timeout,
+- follow-up prompt detection timeout,
+- recovery timeout.
+
+When a timeout occurs, retry the current stage within the bounded budget, then save the row with a specific `failure_reason`. Do not let a search/comparison answer timeout hold the whole run indefinitely.
 
 ## Stuck Conversation Recovery
 
