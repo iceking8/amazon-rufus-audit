@@ -18,6 +18,12 @@ Use this reference when a Rufus capture run returns incomplete rows, missing ans
 | Amazon shows "Add a mobile number" or mobile verification | Account security verification is blocking the buyer account session | Stop capture, save `challenge_type=mobile_number_required`, ask human for phone number, then ask for SMS code |
 | Browser shows CAPTCHA, robot check, or account security warning | Platform security challenge | Do not attempt automated bypass; use approved human-in-the-loop workflow or stop |
 | Many repeated CDP/websocket probe turns appear with no answers | Automation is polling without state progress | Stop after repeated no-change checks, save current state, report blocker |
+| `el.click()` returns but Rufus does not submit | React event chain was not triggered | Retry with user-like input events, Enter key, or CDP/Playwright input; record `submit_not_acknowledged` |
+| Wait logic looks for `completed generating` but never sees it | Completion marker was guessed and is not present in current DOM | Wait on observed page state: answer text stability, no `Thinking...`, no resume button |
+| Selector such as `.rufus-papyrus-turn` captures nothing or wrong nodes | Amazon dynamic class changed | Use verified selectors scoped to Rufus input/form/turn structure; run a probe question first |
+| Answer is cut at "Would you like" | Follow-up wording was mistaken for an answer stop marker | Capture full answer text, then parse follow-up prompts separately |
+| Comparison or search-style answer hangs | Rufus answer is long or backend search timed out | Use longer stage timeout, recovery, and row-level failure instead of blocking the whole run |
+| A single failed question disappears from output | No retry or placeholder row was saved | Keep a failed row with attempt count, method, status, and failure reason |
 | Capture process crashes with `EOFError` while reading input | A script used terminal stdin or `input()` in a background/non-interactive run | Remove blocking prompts; use chat/user-facing replies or non-interactive defaults |
 | Persona settings are needed | Amazon profile change would transmit persona data | Ask for explicit confirmation before typing profile/persona details |
 
@@ -47,8 +53,13 @@ When capture quality is poor:
 - Use pre-authorized login and OTP/TOTP workflows only through approved secret channels; never log credentials, cookies, OTP seeds, or one-time codes.
 - Identify the real Rufus submit button. A known good selector can be `#rufus-submit-button`, but still verify it is inside the Rufus input form and has submit behavior.
 - Do not click header buttons or generic buttons near the Rufus panel unless their role is confirmed.
+- Treat successful submission as a verified UI state change, not a successful click call.
+- Avoid dynamic Amazon class selectors unless verified in the current DOM and backed by fallbacks.
 - Submit only one question at a time.
 - Treat `Thinking...` as an active generation state. Do not send another question while any prior row is still thinking.
+- Do not depend on unobserved completion strings such as `completed generating`.
+- Do not use "Would you like" as an answer terminator; capture answers and follow-up prompts separately.
+- Use bounded retries and save failed rows instead of losing them.
 - Page reload may preserve Rufus conversation history, including broken pending responses.
 - If a visible `Resume response` button appears, use it as a recovery action and record it in the row.
 - If no clean reset or new chat exists, do not pretend the next capture is fresh; record the retained history in notes.
