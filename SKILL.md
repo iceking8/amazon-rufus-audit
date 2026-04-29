@@ -56,7 +56,7 @@ If a task requires Amazon login, first check whether the user supplied a pre-aut
    - Capture the visible starter questions.
    - Ask product-profile-generated questions only after starter questions are saved, unless the user specifically asks for a targeted capture.
    - Submit or click exactly one question at a time, wait for the answer to stabilize, then record the question and answer.
-   - If automating the Rufus chat input, use the actual Rufus submit control, not nearby header buttons. See [references/browser-capture.md](references/browser-capture.md).
+   - If automating the Rufus chat input, use the actual Rufus submit control, not nearby header buttons, and verify the submit created a new user question turn. See [references/browser-capture.md](references/browser-capture.md).
    - Collect new follow-up questions generated after each answer.
    - Continue breadth-first until the user-requested depth is reached, the panel stops producing useful new questions, or the audit has enough coverage.
    - If the requested depth cannot be reached because no new valid questions or answers appear, save the rows collected so far and report the stopping reason instead of polling indefinitely.
@@ -110,6 +110,8 @@ When collecting manually or semi-manually:
 - If a question appears but no answer is captured, keep it as `question_only`; do not summarize an answer from surrounding page content.
 - If the answer appears to reference a different product, sponsored item, or general category advice, mark it `out_of_scope`.
 - If a previous response is stuck, look for a visible `Resume response` control. If it completes, keep the row with a recovery note; if it does not, mark the affected rows `question_only` or `blocked`.
+- Do not rely on brittle dynamic CSS classes, nonexistent completion strings, or short phrases such as "Would you like" as answer end markers. Capture the full answer and record follow-up prompts separately.
+- Use bounded retries for submit, wait, and capture failures; never let one failed attempt erase the row.
 
 When browser access is unavailable, accept pasted Rufus Q&A, screenshots, HTML exports, or user-made spreadsheets and continue from normalization and analysis.
 
